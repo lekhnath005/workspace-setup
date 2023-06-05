@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<ruleset name="WordPress Coding Standards">
+	<description>Everest Forms dev PHP_CodeSniffer ruleset.</description>
+
+	<file>.</file>
+
+	<!-- Exclude paths -->
+	<exclude-pattern>*/includes/libraries/</exclude-pattern>
+	<exclude-pattern>*/includes/updater/</exclude-pattern>
+	<exclude-pattern>*/node_modules/*</exclude-pattern>
+	<exclude-pattern>*/vendor/*</exclude-pattern>
+
+	<!-- Show progress, show the error codes for each message (source). -->
+	<arg value="ps" />
+
+	<!-- Strip the filepaths in reports down to the relevant bit. -->
+	<arg name="basepath" value="./" />
+
+	<!-- Check up to 8 files simultaneously. -->
+	<arg name="parallel" value="8" />
+
+	<!-- Check for PHP fiel extensions. -->
+	<arg name="extensions" value="php" />
+
+	<!-- Configs -->
+	<config name="minimum_supported_wp_version" value="4.7" />
+	<config name="testVersion" value="5.6-" />
+
+	<!-- PSR2 -->
+	<rule ref="PSR2.Methods.MethodDeclaration">
+		<exclude name="PSR2.Methods.MethodDeclaration.Underscore" />
+	</rule>
+
+	<!-- WordPress -->
+	<rule ref="WordPress">
+		<exclude name="WordPress.DB.SlowDBQuery.slow_db_query_meta_key" />
+		<!-- Ignore filename error since that won't be renamed. -->
+		<exclude name="WordPress.Files.FileName.InvalidClassFileName" />
+		<exclude name="WordPress.Files.FileName.NotHyphenatedLowercase" />
+		<exclude name="WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase" />
+		<exclude name="WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase" />
+		<exclude name="WordPress.Arrays.CommaAfterArrayItem" />
+	</rule>
+
+	<!-- Rules -->
+	<rule ref="WPEverest-Core" />
+
+	<rule ref="WordPress.Security.ValidatedSanitizedInput">
+		<properties>
+			<property name="customSanitizingFunctions" type="array" value="evf_sanitize_amount,evf_format_amount" />
+		</properties>
+	</rule>
+
+	<rule ref="WordPress.Security.EscapeOutput">
+		<properties>
+			<property name="customEscapingFunctions" type="array" value="evf_clean,evf_sanitize_amount,evf_html_attributes,evf_sanitize_dimension_unit" />
+		</properties>
+	</rule>
+
+	<rule ref="WordPress.WP.I18n">
+		<properties>
+			<property name="text_domain" type="array" value="everest-forms,everest-forms-pro,everest-forms-captcha,everest-forms-convertkit,everest-forms-geolocation,everest-forms-mailchimp,everest-forms-multi-part,everest-forms-paypal-standard,everest-forms-pdf-submission,everest-forms-post-submissions,everest-forms-stripe,everest-forms-style-customizer,everest-forms-survey-polls-quiz,everest-forms-user-registration,everest-forms-zapier,everest-forms-activecampaign,everest-forms-mailerlite,everest-forms-form-restriction,everest-forms-google-sheets,everest-forms-email-templates,everest-forms-campaign-monitor,everest-forms-save-and-continue,everest-forms-repeater-fields,everest-forms-calculations,everest-forms-sms-notifications,everest-forms-razorpay,everest-forms-coupons,everest-forms-frontend-listing,everest-forms-pipedrive,everest-forms-drip,everest-forms-hubspot,everest-forms-zoho,everest-forms-conversational-forms" />
+		</properties>
+	</rule>
+
+	<rule ref="Squiz.Commenting.FileComment.Missing">
+		<exclude-pattern>everest-forms-pro/src/</exclude-pattern>
+	</rule>
+
+	<rule ref="Squiz.Commenting.FileComment.MissingPackageTag">
+		<exclude-pattern>everest-forms-pro/src/</exclude-pattern>
+	</rule>
+</ruleset>
