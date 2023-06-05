@@ -64,7 +64,7 @@ echo "VSCode Extensions installation completed."
 
 # Download composer.json file
 echo "Downloading composer.json..."
-curl -sSL -o "composer.json" https://example.com/path/to/composer.json
+curl -sSL -o "composer.json" https://raw.githubusercontent.com/lekhnath005/workspace-setup/master/composer.json
 
 # Install composer dependencies
 echo "Installing composer dependencies..."
@@ -74,7 +74,7 @@ echo "Composer installation completed."
 
 # Download package.json file
 echo "Downloading package.json..."
-curl -sSL -o "package.json" https://example.com/path/to/package.json
+curl -sSL -o "package.json" https://raw.githubusercontent.com/lekhnath005/workspace-setup/master/package.json
 
 # Install NPM Packages
 echo "Installing npm packages..."
@@ -84,25 +84,31 @@ echo "NPM installation completed."
 
 # Download phpcs.xml file
 echo "Downloading phpcs.xml..."
-curl -sSL -o "phpcs.xml" https://example.com/path/to/phpcs.xml
+curl -sSL -o "phpcs.xml" https://raw.githubusercontent.com/lekhnath005/workspace-setup/master/phpcs.xml
 
 echo "PHPCS rules downloading completed."
 
 # Create the workspace file
 echo "Workspace creation Initialized."
 
+# Specify the Project name to save workspace path.
+project_name=""
+while [ -z "$project_name" ]; do
+    read -p "Enter the current project name to use in the workspace path: " project_name
+done
+
 cat > workspace.code-workspace <<EOF
 {
 	"folders": [
 		{
-			"name": "wpeverest",
-			"path": "../../../laragon/www/wpeverest"
+			"name": "$project_name",
+			"path": "../../../laragon/www/$project_name"
 		}
 	],
 	"transient": false,
 	"settings": {
 		"phpsab.composerJsonPath": "wp-content\\plugins\\composer.json",
-		"terminal.integrated.cwd": "${workspaceFolder:wpeverest}/wp-content/plugins",
+		"terminal.integrated.cwd": "${workspaceFolder:$project_name}/wp-content/plugins",
 		"files.exclude": {
 			"**/wordpress/src": true,
 			"**/wp-admin/images": true,
@@ -177,14 +183,14 @@ cat > workspace.code-workspace <<EOF
 				"name": "Open the Edge DevTools",
 				"type": "vscode-edge-devtools.debug",
 				"request": "attach",
-				"webRoot": "${workspaceFolder:wpeverest}"
+				"webRoot": "${workspaceFolder:$project_name}"
 			},
 			{
 				"name": "Attach to Microsoft Edge",
 				"type": "pwa-msedge",
 				"request": "attach",
 				"port": 9222,
-				"webRoot": "${workspaceFolder:wpeverest}",
+				"webRoot": "${workspaceFolder:$project_name}",
 			},
 		],
 		"compounds": [
