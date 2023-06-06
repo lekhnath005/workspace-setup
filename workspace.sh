@@ -4,16 +4,21 @@
 echo "Downloading and Installing all VSCode Extensions"
 
 extensions=(
-    alefragnani.project-manager
-	alexdima.copy-relative-path
-	AncientLord.nightowl-theme
+    2gua.rainbow-brackets
+	aaron-bond.better-comments
+	aaronthomas.vscode-snazzy-operator
+	alefragnani.project-manager
 	bmewburn.vscode-intelephense-client
 	bradgashler.htmltagwrap
 	christian-kohler.path-intellisense
 	claudiosanches.woocommerce
 	claudiosanches.wpcs-whitelist-flags
+	CoenraadS.bracket-pair-colorizer-2
 	dbaeumer.vscode-eslint
+	diegolincoln.vscode-styled-components
+	donjayamanne.jquerysnippets
 	dsznajder.es7-react-js-snippets
+	dzannotti.vscode-babel-coloring
 	eamodio.gitlens
 	EditorConfig.EditorConfig
 	esbenp.prettier-vscode
@@ -21,38 +26,35 @@ extensions=(
 	fayras.simple-new-file
 	formulahendry.auto-close-tag
 	formulahendry.auto-rename-tag
-	GitHub.github-vscode-theme
 	GitHub.vscode-pull-request-github
 	GrapeCity.gc-excelviewer
 	humao.rest-client
 	johnbillion.vscode-wordpress-hooks
-	johnpapa.vscode-peacock
-	kakumei.php-xdebug
 	MehediDracula.php-namespace-resolver
 	mitchdenny.ecdc
+	mohd-akram.vscode-html-format
 	mrmlnc.vscode-duplicate
 	ms-vsliveshare.vsliveshare
-	ms-vsliveshare.vsliveshare-audio
-	ms-vsliveshare.vsliveshare-pack
+	msjsdiag.debugger-for-chrome
 	neilbrayfield.php-docblocker
+	oouo-diogo-perdigao.docthis
+	PhilHindle.errorlens
 	PKief.material-icon-theme
 	pnp.polacode
-	ritwickdey.LiveServer
-	ryannaddy.laravel-artisan
+	RobbOwen.synthwave-vscode
 	sadesyllas.vscode-workspace-switcher
 	sdras.night-owl
-	thenikso.github-plus-theme
+	Shan.code-settings-sync
+	streetsidesoftware.code-spell-checker
 	TomasHubelbauer.vscode-markdown-table-format
+	tungvn.wordpress-snippet
 	Tyriar.lorem-ipsum
 	usernamehw.errorlens
 	valeryanm.vscode-phpsab
 	wk-j.save-and-run
-	wongjn.php-sniffer
-	wordpresstoolbox.wordpress-toolbox
-	xdebug.php-debug
-	yassh.copy-with-line-numbers
+	wwm.better-align
+	xabikos.ReactSnippets
 	yogensia.searchwpdocs
-	zhuangtongfa.material-theme
 )
 
 # Install each extension
