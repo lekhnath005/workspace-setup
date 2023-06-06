@@ -97,18 +97,23 @@ while [ -z "$project_name" ]; do
     read -p "Enter the current project name to use in the workspace path: " project_name
 done
 
-cat > workspace.code-workspace <<EOF
+# Specify the file path to save the workspace.code-workspace file
+read -p "Enter the file path to save the workspace.code-workspace file (default: current directory/workspace.code-workspace): " filepath
+filepath="${filepath:-./workspace.code-workspace}"  # Set the default value to current directory/workspace.code-workspace if no input is provided
+
+# Create the workspace.code-workspace file
+cat > "$filepath" <<EOF
 {
 	"folders": [
 		{
-			"name": "$project_name",
-			"path": "../../../laragon/www/$project_name"
+			"name": "${project_name}",
+			"path": "../../../laragon/www/${project_name}"
 		}
 	],
 	"transient": false,
 	"settings": {
 		"phpsab.composerJsonPath": "wp-content\\plugins\\composer.json",
-		"terminal.integrated.cwd": "${workspaceFolder:$project_name}/wp-content/plugins",
+		"terminal.integrated.cwd": "${workspaceFolder}/${project_name}/wp-content/plugins",
 		"files.exclude": {
 			"**/wordpress/src": true,
 			"**/wp-admin/images": true,
@@ -183,14 +188,14 @@ cat > workspace.code-workspace <<EOF
 				"name": "Open the Edge DevTools",
 				"type": "vscode-edge-devtools.debug",
 				"request": "attach",
-				"webRoot": "${workspaceFolder:$project_name}"
+				"webRoot": "${workspaceFolder}/${project_name}"
 			},
 			{
 				"name": "Attach to Microsoft Edge",
 				"type": "pwa-msedge",
 				"request": "attach",
 				"port": 9222,
-				"webRoot": "${workspaceFolder:$project_name}",
+				"webRoot": "${workspaceFolder}/${project_name}"
 			},
 		],
 		"compounds": [
