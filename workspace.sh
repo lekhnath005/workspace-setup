@@ -72,16 +72,6 @@ composer install
 
 echo "Composer installation completed."
 
-# Download package.json file
-echo "Downloading package.json..."
-curl -sSL -o "package.json" https://raw.githubusercontent.com/lekhnath005/workspace-setup/master/package.json
-
-# Install NPM Packages
-echo "Installing npm packages..."
-npm install
-
-echo "NPM installation completed."
-
 # Download phpcs.xml file
 echo "Downloading phpcs.xml..."
 curl -sSL -o "phpcs.xml" https://raw.githubusercontent.com/lekhnath005/workspace-setup/master/phpcs.xml
@@ -94,26 +84,49 @@ echo "Workspace creation Initialized."
 # Specify the Project name to save workspace path.
 project_name=""
 while [ -z "$project_name" ]; do
-    read -p "Enter the current project name to use in the workspace path: " project_name
+    read -p "Enter the current project name : " project_name
 done
 
 # Specify the file path to save the workspace.code-workspace file
-read -p "Enter the file path to save the workspace.code-workspace file (default: current directory/workspace.code-workspace): " filepath
-filepath="${filepath:-./workspace.code-workspace}"  # Set the default value to current directory/workspace.code-workspace if no input is provided
+read -p "Enter the file path to save the workspace.code-workspace file (default: C:/): " filepath
+filepath="${filepath:-C:/}"  # Set the default value to current directory/workspace.code-workspace if no input is provided
 
-# Create the workspace.code-workspace file
-cat > "$filepath" <<EOF
+# Convert the filepath to Windows path format
+win_filepath=$(cygpath -w "$filepath")
+
+# Create the workspace directory if it doesn't exist
+mkdir -p "$win_filepath"
+
+# Get the current directory
+current_path="$(pwd)"
+
+# Move two folders back
+parent_path="$(dirname "$(dirname "$current_path")")"
+
+# Convert path to Windows format
+project_path=$(cygpath -w "$parent_path")
+project_path=${project_path//\\//}
+
+# Change directory to the workspace path
+cd "$win_filepath" || exit
+
+# Assign the string to the plugins variable
+plugins="\${workspaceFolder:$project_name}/wp-content/plugins"
+workspace="\${workspaceFolder:$project_name}"
+
+# Create the workspace file with the specified name
+cat > "$project_name.code-workspace" <<EOL
 {
 	"folders": [
 		{
 			"name": "${project_name}",
-			"path": "../../../laragon/www/${project_name}"
+			"path": "${project_path}"
 		}
 	],
 	"transient": false,
 	"settings": {
-		"phpsab.composerJsonPath": "wp-content\\plugins\\composer.json",
-		"terminal.integrated.cwd": "${workspaceFolder}/${project_name}/wp-content/plugins",
+		"phpsab.composerJsonPath": "wp-content/plugins/composer.json",
+		"terminal.integrated.cwd": "$plugins",
 		"files.exclude": {
 			"**/wordpress/src": true,
 			"**/wp-admin/images": true,
@@ -188,14 +201,14 @@ cat > "$filepath" <<EOF
 				"name": "Open the Edge DevTools",
 				"type": "vscode-edge-devtools.debug",
 				"request": "attach",
-				"webRoot": "${workspaceFolder}/${project_name}"
+				"webRoot": "$workspace"
 			},
 			{
 				"name": "Attach to Microsoft Edge",
 				"type": "pwa-msedge",
 				"request": "attach",
 				"port": 9222,
-				"webRoot": "${workspaceFolder}/${project_name}"
+				"webRoot": "$workspace"
 			},
 		],
 		"compounds": [
@@ -209,8 +222,9 @@ cat > "$filepath" <<EOF
 		]
 	}
 }
-EOF
+EOL
 
+echo "Workspace path : $win_filepath"
 echo "Workspace created successfully."
 
 # Set the user's name and email
@@ -218,14 +232,17 @@ read -p "Enter your name: " name
 read -p "Enter your email: " email
 
 # Specify the directory to save the settings.json file
-read -p "Enter the directory to save the settings.json file (default: current directory): " directory
-directory="${directory:-.}"  # Set the default value to current directory if no input is provided
+read -p "Enter the directory to save the settings.json file (default: C:/Users/Administrator/AppData/Roaming/Code/User): " directory
+directory="${directory:-C:/Users/Administrator/AppData/Roaming/Code/User}"  # Set the default value to current directory if no input is provided
+
+# Convert the filepath to Windows path format
+win_filepath=$(cygpath -w "$directory")
 
 # Check if settings.json already exists in the specified directory
-if [ -f "$directory/settings.json" ]; then
-    read -p "settings.json already exists in $directory. Do you want to replace it? (y/n): " replace_existing
+if [ -f "$win_filepath/settings.json" ]; then
+    read -p "settings.json already exists in $win_filepath. Do you want to replace it? (y/n): " replace_existing
     if [[ $replace_existing =~ ^[Yy]$ ]]; then
-        rm "$directory/settings.json"
+        rm "$win_filepath/settings.json"
     else
         echo "Operation cancelled."
         exit 0
@@ -235,7 +252,7 @@ fi
 # Create the settings.json file
 cat > "$directory/settings.json" <<EOF
 {
-	"editor.fontSize": 14,
+	"editor.fontSize": 15,
 	"editor.fontFamily": "'Cascadia Code', Consolas, 'Courier New', monospace",
 	"editor.fontLigatures": "'calt', 'ss01', 'ss02', 'ss03', 'ss04', 'ss05', 'ss06', 'zero', 'onum'",
 	"editor.linkedEditing": true,
@@ -362,7 +379,7 @@ cat > "$directory/settings.json" <<EOF
 			"supported": true
 		},
 	},
-	"terminal.integrated.fontSize": 11,
+	"terminal.integrated.fontSize": 12,
 	"terminal.integrated.cursorStyle": "line",
 	"terminal.integrated.cursorBlinking": true,
 	"terminal.integrated.defaultLocation": "view",
@@ -538,7 +555,7 @@ cat > "$directory/settings.json" <<EOF
 	"material-icon-theme.folders.color": "#42a5f5",
 	"material-icon-theme.activeIconPack": "react_redux",
 	"vscodeWorkspaceSwitcher.paths": [
-		"C:\\Users\\User\\OneDrive\\Workspace"
+		"C:/Users/User/OneDrive/Workspace"
 	],
 	"vscodeWorkspaceSwitcher.showInExplorer": false,
 	"vscodeWorkspaceSwitcher.showInActivityBar": false,
@@ -565,4 +582,4 @@ cat > "$directory/settings.json" <<EOF
 }
 EOF
 
-echo "settings.json created successfully in $directory."
+echo "settings.json created successfully in $win_filepath."

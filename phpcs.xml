@@ -1,12 +1,14 @@
 <?xml version="1.0"?>
 <ruleset name="WordPress Coding Standards">
-	<description>Everest Forms dev PHP_CodeSniffer ruleset.</description>
+	<description>User Registration dev PHP_CodeSniffer ruleset.</description>
 
 	<file>.</file>
 
 	<!-- Exclude paths -->
 	<exclude-pattern>*/includes/libraries/</exclude-pattern>
 	<exclude-pattern>*/includes/updater/</exclude-pattern>
+	<exclude-pattern>includes/functions-ur-deprecated.php</exclude-pattern>
+	<exclude-pattern>includes/abstracts/legacy/</exclude-pattern>
 	<exclude-pattern>*/node_modules/*</exclude-pattern>
 	<exclude-pattern>*/vendor/*</exclude-pattern>
 
@@ -19,7 +21,7 @@
 	<!-- Check up to 8 files simultaneously. -->
 	<arg name="parallel" value="8" />
 
-	<!-- Check for PHP fiel extensions. -->
+	<!-- Check for specific valid file extensions. -->
 	<arg name="extensions" value="php" />
 
 	<!-- Configs -->
@@ -39,35 +41,63 @@
 		<exclude name="WordPress.Files.FileName.NotHyphenatedLowercase" />
 		<exclude name="WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase" />
 		<exclude name="WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase" />
+		<exclude name="WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid" />
 		<exclude name="WordPress.Arrays.CommaAfterArrayItem" />
+
+		<!-- Ignore base64_encode() and base64_decode() obfuscation error in parser -->
+		<exclude name="WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode" />
+		<exclude name="WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode" />
 	</rule>
 
 	<!-- Rules -->
 	<rule ref="WPEverest-Core" />
 
-	<rule ref="WordPress.Security.ValidatedSanitizedInput">
-		<properties>
-			<property name="customSanitizingFunctions" type="array" value="evf_sanitize_amount,evf_format_amount" />
-		</properties>
+	<rule ref="PEAR.NamingConventions.ValidClassName">
+		<exclude-pattern>includes/</exclude-pattern>
 	</rule>
 
-	<rule ref="WordPress.Security.EscapeOutput">
-		<properties>
-			<property name="customEscapingFunctions" type="array" value="evf_clean,evf_sanitize_amount,evf_html_attributes,evf_sanitize_dimension_unit" />
-		</properties>
+	<rule ref="PSR2.Classes.PropertyDeclaration.Underscore">
+		<exclude-pattern>includes/class-ur-session-handler.php</exclude-pattern>
 	</rule>
 
+	<rule ref="WordPress.Files.FileName.InvalidClassFileName">
+		<exclude-pattern>includes/**/abstract-*.php</exclude-pattern>
+		<exclude-pattern>includes/class-user-registration.php</exclude-pattern>
+	</rule>
+
+	<!-- Custom rule properties -->
 	<rule ref="WordPress.WP.I18n">
 		<properties>
-			<property name="text_domain" type="array" value="everest-forms,everest-forms-pro,everest-forms-captcha,everest-forms-convertkit,everest-forms-geolocation,everest-forms-mailchimp,everest-forms-multi-part,everest-forms-paypal-standard,everest-forms-pdf-submission,everest-forms-post-submissions,everest-forms-stripe,everest-forms-style-customizer,everest-forms-survey-polls-quiz,everest-forms-user-registration,everest-forms-zapier,everest-forms-activecampaign,everest-forms-mailerlite,everest-forms-form-restriction,everest-forms-google-sheets,everest-forms-email-templates,everest-forms-campaign-monitor,everest-forms-save-and-continue,everest-forms-repeater-fields,everest-forms-calculations,everest-forms-sms-notifications,everest-forms-razorpay,everest-forms-coupons,everest-forms-frontend-listing,everest-forms-pipedrive,everest-forms-drip,everest-forms-hubspot,everest-forms-zoho,everest-forms-conversational-forms" />
+			<property name="text_domain" type="array" value="user-registration" />
 		</properties>
 	</rule>
 
+	<!-- Do not require docblocks for unit tests -->
 	<rule ref="Squiz.Commenting.FileComment.Missing">
-		<exclude-pattern>everest-forms-pro/src/</exclude-pattern>
+		<exclude-pattern>tests/phpunit/*</exclude-pattern>
 	</rule>
-
-	<rule ref="Squiz.Commenting.FileComment.MissingPackageTag">
-		<exclude-pattern>everest-forms-pro/src/</exclude-pattern>
+	<rule ref="Squiz.Commenting.ClassComment.Missing">
+		<exclude-pattern>tests/phpunit/*</exclude-pattern>
+	</rule>
+	<rule ref="Squiz.Commenting.ClassComment.SpacingAfter">
+		<exclude-pattern>tests/phpunit/*</exclude-pattern>
+	</rule>
+	<rule ref="Squiz.Commenting.FunctionComment.Missing">
+		<exclude-pattern>tests/phpunit/*</exclude-pattern>
+	</rule>
+	<rule ref="Squiz.Commenting.FunctionComment.MissingParamTag">
+		<exclude-pattern>tests/phpunit/*</exclude-pattern>
+	</rule>
+	<rule ref="Generic.Commenting.DocComment.Empty">
+		<exclude-pattern>tests/phpunit/*</exclude-pattern>
+	</rule>
+	<rule ref="Generic.Commenting.DocComment.MissingShort">
+		<exclude-pattern>tests/phpunit/*</exclude-pattern>
+	</rule>
+	<rule ref="Squiz.Commenting.VariableComment.Missing">
+		<exclude-pattern>tests/phpunit/*</exclude-pattern>
+	</rule>
+	<rule ref="Squiz.Commenting.FunctionCommentThrowTag.Missing">
+		<exclude-pattern>tests/phpunit/*</exclude-pattern>
 	</rule>
 </ruleset>
