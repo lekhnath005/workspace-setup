@@ -96,6 +96,8 @@ filepath="${filepath:-C:/}"  # Set the default value to current directory/worksp
 # Convert the filepath to Windows path format
 win_filepath=$(cygpath -w "$filepath")
 
+win_filepath=${win_filepath//\\//}
+
 # Create the workspace directory if it doesn't exist
 mkdir -p "$win_filepath"
 
@@ -229,10 +231,6 @@ EOL
 echo "Workspace path : $win_filepath"
 echo "Workspace created successfully."
 
-# Set the user's name and email
-read -p "Enter your name: " name
-read -p "Enter your email: " email
-
 # Specify the directory to save the settings.json file
 read -p "Enter the directory to save the settings.json file (default: C:/Users/Administrator/AppData/Roaming/Code/User): " directory
 directory="${directory:-C:/Users/Administrator/AppData/Roaming/Code/User}"  # Set the default value to current directory if no input is provided
@@ -240,13 +238,15 @@ directory="${directory:-C:/Users/Administrator/AppData/Roaming/Code/User}"  # Se
 # Convert the filepath to Windows path format
 win_filepath=$(cygpath -w "$directory")
 
+win_filepath=${win_filepath//\\//}
+
 # Check if settings.json already exists in the specified directory
 if [ -f "$win_filepath/settings.json" ]; then
     read -p "settings.json already exists in $win_filepath. Do you want to replace it? (y/n): " replace_existing
     if [[ $replace_existing =~ ^[Yy]$ ]]; then
         rm "$win_filepath/settings.json"
     else
-        echo "Operation cancelled."
+		echo "settings.json setup completed."
         exit 0
     fi
 fi
@@ -254,7 +254,7 @@ fi
 # Create the settings.json file
 cat > "$directory/settings.json" <<EOF
 {
-	"editor.fontSize": 15,
+	"editor.fontSize": 14,
 	"editor.fontFamily": "'Cascadia Code', Consolas, 'Courier New', monospace",
 	"editor.fontLigatures": "'calt', 'ss01', 'ss02', 'ss03', 'ss04', 'ss05', 'ss06', 'zero', 'onum'",
 	"editor.linkedEditing": true,
